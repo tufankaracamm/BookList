@@ -9,7 +9,7 @@ class BookListScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Book List"),
+      appBar: AppBar(backgroundColor: Colors.black,title: Text("Book List"),
         actions: [
           IconButton(onPressed: ()=>Navigator.pushNamed(context, "reading-list"), icon: Icon(Icons.bookmark_add_outlined))
         ],),
@@ -61,7 +61,7 @@ class BookListScreen extends StatelessWidget{
                                           textAlign: TextAlign.center),
                                       decoration: BoxDecoration(
                                         border: Border.all(width: 2.0,
-                                            color: Colors.orange.shade900),
+                                            color: Colors.black),
                                       ),
                                     ),
                                   ],
@@ -75,13 +75,13 @@ class BookListScreen extends StatelessWidget{
                                     ElevatedButton(
                                       style: ButtonStyle(
                                           backgroundColor: MaterialStateProperty
-                                              .all(Colors.orange)),
+                                              .all(Colors.black)),
                                       onPressed: () {
                                         ReadingListBloc().addToReadingList(
                                             new ReadingList(book));
                                       },
                                       child: Icon(
-                                        Icons.add_task, color: Colors.black,),),
+                                        Icons.add, color: Colors.white,),),
                                     ElevatedButton(
                                       style: ButtonStyle
                                         (backgroundColor: MaterialStateProperty

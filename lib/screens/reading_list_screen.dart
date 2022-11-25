@@ -13,34 +13,52 @@ class _ReadingListScreenState extends State<ReadingListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("My Reading List"),),
+      appBar: AppBar(
+        title: Text("My Reading List"),
+        backgroundColor: Colors.black,
+      ),
       body: StreamBuilder<dynamic>(
+        //bir veri alır - aldığı veriyi başka bir widget a verir.
         stream: ReadingListBloc().getStream,
         initialData: cartBloc.getAll(),
-        builder: (context,AsyncSnapshot snapshot){
-          return buildReadingList(snapshot);
+        builder: (context, AsyncSnapshot snapshot) {
+          return list(snapshot);
         },
       ),
     );
   }
 
-  buildReadingList(AsyncSnapshot snapshot){
-    var readingList=snapshot.data;
-    return ListView.builder(
-        itemCount: readingList.length,
-        itemBuilder: (context,index){
-          var readingListItem=readingList[index];
-          return ListTile(
-            leading: CircleAvatar(child: Text(index.toString())),
-            title: Text(readingListItem.title),
-            subtitle: Text(readingListItem.author),
+  list(AsyncSnapshot snapshot) {
+
+    List<ReadingList> readingList = snapshot.data;
+    return ReorderableListView(
+      children: <Widget>[
+        for (int index = 0; index < readingList.length; index += 1)
+          ListTile(
+            key: Key('$index'),
+            leading: Image.network(readingList.elementAt(index).book!.image!),
+            subtitle: Text(readingList.elementAt(index).book!.author!),
+            tileColor: index % 2 == 0 ? Colors.grey.shade100 : Colors.grey.shade300,
+            title: Text(readingList.elementAt(index).book!.title!),
             trailing: IconButton(
-              icon: Icon(Icons.remove_shopping_cart,color: Colors.red),
-              onPressed: (){
-                ReadingListBloc().removeToReadingList(readingListItem);
+              icon: Icon(Icons.highlight_remove_outlined, color: Colors.black),
+              onPressed: () {
+                ReadingListBloc()
+                    .removeToReadingList(readingList.elementAt(index));
+                setState(() {});
               },
             ),
-          );
+          ),
+      ],
+      onReorder: (int oldIndex, int newIndex) {
+        setState(() {
+          if (oldIndex < newIndex) {
+            newIndex -= 1;
+          }
+          ReadingList item = readingList.removeAt(oldIndex);
+          readingList.insert(newIndex, item);
         });
+      },
+    );
   }
 }

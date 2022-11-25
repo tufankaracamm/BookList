@@ -7,12 +7,10 @@ class ReadingListBloc {
 
   Stream get getStream => readingListStreamController.stream;
 
-  //todo aynı kitaptan ikinci kere eklenmiyecek.
   void addToReadingList(ReadingList item) {
-          ReadingListService.addToReadingList(item);
-        readingListStreamController.sink.add(ReadingListService.getReadingList());
-    }
-
+    ReadingListService.addToReadingList(item);
+    readingListStreamController.sink.add(ReadingListService.getReadingList());
+  }
 
   void removeToReadingList(ReadingList item) {
     ReadingListService.removeFromReadingList(item);
